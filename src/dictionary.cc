@@ -97,7 +97,7 @@ const std::vector<int32_t> Dictionary::getSubwords(
   }
   std::vector<int32_t> ngrams;
   if (word != EOS) {
-    computeSubwords(BOW + word + EOW, ngrams);
+    computeSubwords_v2(BOW + word + EOW, ngrams);
   }
   return ngrams;
 }
@@ -195,13 +195,39 @@ void Dictionary::computeSubwords(
   }
 }
 
+void Dictionary::computeSubwords_v2(
+    const std::string& word,
+    std::vector<int32_t>& ngrams,
+    std::vector<std::string>* substrings) const {
+  for (size_t i = 0; i < word.size(); i++) {
+    std::string ngram;
+    if ((word[i] & 0xC0) == 0x80) {
+      continue;
+    }
+    if (word_subwords.find(word) == word_subwords.end()) return;
+        //将nid对应的一级标签、二级标签、attention、genera_tag作为sub_words
+
+    std::vector<std::string> mysub_words = word_subwords[word];
+    for (int i = 0; i < mysub_words.size(); ++i){
+      std::string ngram = mysub_words[i];
+      int32_t h = hash(ngram) % args_->bucket;
+      pushHash(ngrams, h);
+      if (substrings) {
+        substrings->push_back(ngram);
+      }
+    }
+
+  }
+}
+
 void Dictionary::initNgrams() {
   for (size_t i = 0; i < size_; i++) {
     std::string word = BOW + words_[i].word + EOW;
     words_[i].subwords.clear();
     words_[i].subwords.push_back(i);
     if (words_[i].word != EOS) {
-      computeSubwords(word, words_[i].subwords);
+      //computeSubwords(word, words_[i].subwords);
+      computeSubwords_v2(word, words_[i].subwords);
     }
   }
 }
@@ -329,7 +355,7 @@ void Dictionary::addSubwords(
     int32_t wid) const {
   if (wid < 0) { // out of vocab
     if (token != EOS) {
-      computeSubwords(BOW + token + EOW, line);
+      computeSubwords_v2(BOW + token + EOW, line);
     }
   } else {
     if (args_->maxn <= 0) { // in vocab w/o subwords

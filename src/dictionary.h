@@ -48,6 +48,7 @@ class Dictionary {
   std::shared_ptr<Args> args_;
   std::vector<int32_t> word2int_;
   std::vector<entry> words_;
+  std::unordered_map<std::string, std::vector<std::string> > word_subwords;
 
   std::vector<real> pdiscard_;
   int32_t size_;
@@ -85,6 +86,10 @@ class Dictionary {
       std::vector<int32_t>&,
       std::vector<std::string>&) const;
   void computeSubwords(
+      const std::string&,
+      std::vector<int32_t>&,
+      std::vector<std::string>* substrings = nullptr) const;
+  void computeSubwords_v2(
       const std::string&,
       std::vector<int32_t>&,
       std::vector<std::string>* substrings = nullptr) const;
