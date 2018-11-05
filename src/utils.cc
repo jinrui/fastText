@@ -8,6 +8,7 @@
  */
 
 #include "utils.h"
+#include <iostream>
 
 #include <ios>
 
@@ -23,6 +24,16 @@ int64_t size(std::ifstream& ifs) {
 void seek(std::ifstream& ifs, int64_t pos) {
   ifs.clear();
   ifs.seekg(std::streampos(pos));
+}
+void split(const std::string& s,std::vector<std::string>& sv,const char flag) {
+    sv.clear();
+    std::istringstream iss(s);
+    std::string temp;
+
+    while (getline(iss, temp, flag)) {
+        sv.push_back(temp);
+    }
+    return;
 }
 } // namespace utils
 

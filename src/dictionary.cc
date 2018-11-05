@@ -17,13 +17,14 @@
 #include <iostream>
 #include <iterator>
 #include <stdexcept>
+#include <fstream>
+
 
 namespace fasttext {
 
 const std::string Dictionary::EOS = "</s>";
 const std::string Dictionary::BOW = "<";
 const std::string Dictionary::EOW = ">";
-
 Dictionary::Dictionary(std::shared_ptr<Args> args)
     : args_(args),
       word2int_(MAX_VOCAB_SIZE, -1),
@@ -204,10 +205,10 @@ void Dictionary::computeSubwords_v2(
     if ((word[i] & 0xC0) == 0x80) {
       continue;
     }
-    if (word_subwords.find(word) == word_subwords.end()) return;
+    auto it = word_subwords.find(word);
+    if (it == word_subwords.end()) return;
         //将nid对应的一级标签、二级标签、attention、genera_tag作为sub_words
-
-    std::vector<std::string> mysub_words = word_subwords[word];
+    std::vector<std::string> mysub_words = it->second;
     for (int i = 0; i < mysub_words.size(); ++i){
       std::string ngram = mysub_words[i];
       int32_t h = hash(ngram) % args_->bucket;
@@ -283,6 +284,27 @@ void Dictionary::readFromFile(std::istream& in) {
     throw std::invalid_argument(
         "Empty vocabulary. Try a smaller -minCount value.");
   }
+}
+
+void Dictionary::readFromSBFile(std::ifstream& in) {
+  std::string line;
+  if (! in.is_open())
+  { 
+      std::cerr << "Error opening file in readFromSBFile"; 
+      exit (1); 
+  } 
+  while (getline(in,line))
+  {
+      std::vector<std::string> result;
+      utils::split(line,result);
+      if (result.size() < 1){
+        return;
+      }
+      word_subwords[result[0]] = std::vector<std::string>();
+      for(int i =1;i<result.size();++i){
+        word_subwords[result[0]].push_back(result[i]);
+      }
+  } 
 }
 
 void Dictionary::threshold(int64_t t, int64_t tl) {

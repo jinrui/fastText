@@ -726,8 +726,19 @@ void FastText::train(const Args args) {
     throw std::invalid_argument(
         args_->input + " cannot be opened for training!");
   }
-  dict_->readFromFile(ifs);
+  if (args_->sbinput == "-") {
+    // manage expectations
+    throw std::invalid_argument("Cannot use stdin for training!");
+  }
+  std::ifstream sbifs(args_->sbinput);
+  if (!ifs.is_open()) {
+    throw std::invalid_argument(
+        args_->sbinput + " cannot be opened for training!");
+  }
+  dict_->readFromFile(sbifs);
+  dict_->readFromSBFile(ifs);
   ifs.close();
+  sbifs.close();
 
   if (args_->pretrainedVectors.size() != 0) {
     loadVectors(args_->pretrainedVectors);

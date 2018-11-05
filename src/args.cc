@@ -104,6 +104,8 @@ void Args::parseArgs(const std::vector<std::string>& args) {
         input = std::string(args.at(ai + 1));
       } else if (args[ai] == "-output") {
         output = std::string(args.at(ai + 1));
+      } else if (args[ai] == "-sbinput") {
+        sbinput = std::string(args.at(ai + 1));
       } else if (args[ai] == "-lr") {
         lr = std::stof(args.at(ai + 1));
       } else if (args[ai] == "-lrUpdateRate") {
@@ -198,6 +200,7 @@ void Args::printBasicHelp() {
   std::cerr << "\nThe following arguments are mandatory:\n"
             << "  -input              training file path\n"
             << "  -output             output file path\n"
+            << "  -sbinput       words consist of subwords"
             << "\nThe following arguments are optional:\n"
             << "  -verbose            verbosity level [" << verbose << "]\n";
 }

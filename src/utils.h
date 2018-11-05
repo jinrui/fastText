@@ -10,6 +10,10 @@
 #pragma once
 
 #include <fstream>
+#include <vector>
+#include <string>
+#include <iostream>
+#include<sstream>
 
 #if defined(__clang__) || defined(__GNUC__)
 #define FASTTEXT_DEPRECATED(msg) __attribute__((__deprecated__(msg)))
@@ -25,6 +29,7 @@ namespace utils {
 
 int64_t size(std::ifstream&);
 void seek(std::ifstream&, int64_t);
+void split(const std::string& s,std::vector<std::string>& sv,const char flag = ' ');
 } // namespace utils
 
 } // namespace fasttext
