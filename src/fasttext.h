@@ -18,6 +18,7 @@
 #include <queue>
 #include <set>
 #include <tuple>
+#include <set>
 
 #include "args.h"
 #include "dictionary.h"

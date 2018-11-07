@@ -16,6 +16,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <set>
 
 #include "args.h"
 #include "real.h"
@@ -52,6 +53,7 @@ class Dictionary {
   std::unordered_map<std::string, std::vector<std::string> > word_subwords;
 
   std::vector<real> pdiscard_;
+  
   int32_t size_;
   int32_t nwords_;
   int32_t nlabels_;
@@ -68,6 +70,8 @@ class Dictionary {
   static const std::string EOS;
   static const std::string BOW;
   static const std::string EOW;
+
+  std::set<std::string> total_subwords;
 
   explicit Dictionary(std::shared_ptr<Args>);
   explicit Dictionary(std::shared_ptr<Args>, std::istream&);

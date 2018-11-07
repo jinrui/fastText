@@ -94,6 +94,13 @@ void FastText::saveVectors() {
     getWordVector(vec, word);
     ofs << word << " " << vec << std::endl;
   }
+  //打印subword
+  auto it = dict_->total_subwords.begin();
+  for (;it != dict_->total_subwords.end(); ++it){
+    std::string subwords = *it;
+    getSubwordVector(vec, subwords);
+    ofs << subwords << " " << vec << std::endl;
+  }
   ofs.close();
 }
 

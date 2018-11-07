@@ -115,7 +115,7 @@ void Dictionary::getSubwords(
     substrings.push_back(words_[i].word);
   }
   if (word != EOS) {
-    computeSubwords(BOW + word + EOW, ngrams, &substrings);
+    computeSubwords_v2(BOW + word + EOW, ngrams, &substrings);
   }
 }
 
@@ -303,6 +303,7 @@ void Dictionary::readFromSBFile(std::ifstream& in) {
       word_subwords[result[0]] = std::vector<std::string>();
       for(int i =1;i<result.size();++i){
         word_subwords[result[0]].push_back(result[i]);
+        total_subwords.insert(result[i]);
       }
   } 
 }
