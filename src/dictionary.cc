@@ -216,7 +216,8 @@ void Dictionary::computeSubwords_v2(
 
 void Dictionary::initNgrams() {
   for (size_t i = 0; i < size_; i++) {
-    std::string word = BOW + words_[i].word + EOW;
+    //std::string word = BOW + words_[i].word + EOW;
+    std::string word = words_[i].word;
     words_[i].subwords.clear();
     words_[i].subwords.push_back(i);
     if (words_[i].word != EOS) {
