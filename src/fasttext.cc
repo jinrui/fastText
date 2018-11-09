@@ -742,8 +742,8 @@ void FastText::train(const Args args) {
     throw std::invalid_argument(
         args_->sbinput + " cannot be opened for training!");
   }
-  dict_->readFromFile(ifs);
   dict_->readFromSBFile(sbifs);
+  dict_->readFromFile(ifs);
   ifs.close();
   sbifs.close();
 
