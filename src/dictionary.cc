@@ -200,11 +200,6 @@ void Dictionary::computeSubwords_v2(
     const std::string& word,
     std::vector<int32_t>& ngrams,
     std::vector<std::string>* substrings) const {
-  for (size_t i = 0; i < word.size(); i++) {
-    std::string ngram;
-    if ((word[i] & 0xC0) == 0x80) {
-      continue;
-    }
     auto it = word_subwords.find(word);
     if (it == word_subwords.end()) return;
         //将nid对应的一级标签、二级标签、attention、genera_tag作为sub_words
@@ -217,8 +212,6 @@ void Dictionary::computeSubwords_v2(
         substrings->push_back(ngram);
       }
     }
-
-  }
 }
 
 void Dictionary::initNgrams() {
